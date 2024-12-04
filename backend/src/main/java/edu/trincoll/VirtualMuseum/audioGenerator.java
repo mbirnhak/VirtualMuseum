@@ -1,33 +1,57 @@
+package edu.trincoll.VirtualMuseum;
+
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import com.google.gson.Gson;
 
-public class audioTest {
+public class audioGenerator {
+
+    // Java record for VoiceSettings JSON data
+    public record VoiceSettings(
+            double stability,
+            double similarityBoost,
+            double style,
+            boolean useSpeakerBoost
+    ) {}
+
+    // Java record for Payload JSON data
+    public record Payload(
+            String text,
+            String modelId,
+            VoiceSettings voiceSettings,
+            Object pronunciationDictionaryLocators,
+            Object seed,
+            Object previousText,
+            Object nextText,
+            Object previousRequestIds,
+            Object nextRequestIds,
+            boolean usePvcAsIvc,
+            String applyTextNormalization
+    ) {}
+
     public static void main(String[] args) {
-        String XI_API_KEY = "sk_8671dfe6a49e38639a819a5679e91b49635e07f9a0d76311"; // Your API key
+        String XI_API_KEY = System.getenv("XI_API_KEY"); // Your API key
         String VOICE_ID = "CwhRBWXzGAHq8TQ4Fs17"; // Voice ID
         String TEXT_TO_SPEAK = "testing the audio part of our project"; // Text to convert to speech
-        String OUTPUT_PATH = "output1.mp3"; // Path to save the output audio file
+        String OUTPUT_PATH = "src/main/resources/output1.mp3"; // Path to save the output audio file
 
+        VoiceSettings voiceSettings = new VoiceSettings(0.5, 0.8, 0.0, true);
         // Construct the payload with all required fields
-        String payload = "{"
-            + "\"text\": \"" + TEXT_TO_SPEAK + "\","
-            + "\"model_id\": \"eleven_multilingual_v2\","
-            + "\"voice_settings\": {"
-            + "  \"stability\": 0.5,"
-            + "  \"similarity_boost\": 0.8,"
-            + "  \"style\": 0.0,"
-            + "  \"use_speaker_boost\": true"
-            + "},"
-            + "\"pronunciation_dictionary_locators\": [],"
-            + "\"seed\": null,"
-            + "\"previous_text\": null,"
-            + "\"next_text\": null,"
-            + "\"previous_request_ids\": [],"
-            + "\"next_request_ids\": [],"
-            + "\"use_pvc_as_ivc\": false,"
-            + "\"apply_text_normalization\": \"auto\""
-            + "}";
+        Payload payload = new Payload(TEXT_TO_SPEAK,
+                "eleven_multilingual_v2",
+                voiceSettings,
+                "[]",
+                null,
+                null,
+                null,
+                "[]",
+                "[]",
+                false,
+                "auto"
+        );
+        Gson gson = new Gson();
+        String payloadJson = gson.toJson(payload);
 
         // Construct the URI and handle possible URISyntaxException
         try {
@@ -44,7 +68,7 @@ public class audioTest {
 
             // Send the payload
             try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = payload.getBytes(StandardCharsets.UTF_8);
+                byte[] input = payloadJson.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
 
@@ -55,7 +79,7 @@ public class audioTest {
             // If response is OK, read and save the audio
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 InputStream in = new BufferedInputStream(connection.getInputStream());
-                
+
                 // Check if any audio data is received
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 byte[] buffer = new byte[1024];
@@ -75,6 +99,8 @@ public class audioTest {
                 // Save the audio to the output file
                 try (FileOutputStream fos = new FileOutputStream(OUTPUT_PATH)) {
                     fos.write(audioData);
+                } catch(Error e) {
+                    System.out.println("Error outputting stream to file: " + e);
                 }
 
                 System.out.println("Audio saved successfully.");
