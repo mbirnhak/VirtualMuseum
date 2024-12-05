@@ -53,7 +53,7 @@ class VirtualMuseumApplicationTests {
 		TextGenerator textGenerator = new TextGenerator();
 
 		// Act
-		String responseText = textGenerator.visionChat();
+		String responseText = textGenerator.visionChat("https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg");
 
 		// Assert
         assertFalse("The response text should not be empty", responseText.isEmpty());

@@ -4,7 +4,9 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AudioGenerator {
     private final String XI_API_KEY = System.getenv("XI_API_KEY"); // Your API key
 
