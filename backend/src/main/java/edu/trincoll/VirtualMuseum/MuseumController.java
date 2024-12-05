@@ -14,14 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MuseumController {
     private final DalleGenerator dalleGenerator;
+    private final TextGenerator textGenerator;
+    private final AudioGenerator audioGenerator;
 
     @Autowired
-    public MuseumController(DalleGenerator dalleGenerator) {
+    public MuseumController(DalleGenerator dalleGenerator, TextGenerator textGenerator, AudioGenerator audioGenerator) {
         this.dalleGenerator = dalleGenerator;
+        this.textGenerator = textGenerator;
+        this.audioGenerator = audioGenerator;
+
     }
 
     @PostMapping(value = "create/image", consumes = {"application/json"}, produces = {"application/json"})
     public String generateImage(@RequestBody String prompt) {
         return dalleGenerator.generateImage(prompt);
     }
+
+
 }
