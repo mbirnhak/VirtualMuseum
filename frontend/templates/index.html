@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Museum</title>
+    <!-- Optional: Include Bootstrap for the carousel (add to your HTML head) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f0f0; /* Light gray background */
+        }
+
+        .carousel-img {
+            width: 50%; /* Set the image width to 50% of its container */
+            max-width: 500px; /* Optional: you can still set a maximum width if needed */
+            height: auto; /* Keep the aspect ratio of the image */
+            margin: auto; /* Center the image horizontally */
+        }
+    </style>
+
+</head>
+<body>
+
+<h1>Virtual Museum</h1>
+
+<!-- User input for prompt -->
+<form method="POST" action="/create_image">
+    <label for="prompt">Enter a prompt:</label>
+    <input type="text" id="prompt" name="prompt" placeholder="Describe an image" required>
+    <button type="submit">Generate Image</button>
+</form>
+
+<!-- Image Carousel -->
+{% if image_urls %}
+    <h2>Generated Images:</h2>
+    <div id="imageCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for url in image_urls %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <img src="{{ url }}" class="d-block w-50 carousel-img" alt="Generated Image">
+                </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+{% endif %}
+
+<!-- Optional: Include Bootstrap and jQuery (for carousel functionality) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

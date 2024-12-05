@@ -4,11 +4,14 @@ import dev.langchain4j.model.image.ImageModel;
 import dev.langchain4j.model.openai.OpenAiImageModel;
 import dev.langchain4j.model.openai.OpenAiImageModelName;
 import dev.langchain4j.model.output.Response;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DalleGenerator {
+    public DalleGenerator() {}
 
     // Method to generate an image given a prompt
-    public static String generateImage(String prompt) {
+    public String generateImage(String prompt) {
         // Initialize the DALL-E 3 model with API key and model name
         ImageModel model = OpenAiImageModel.builder()
                 .apiKey(System.getenv("OPENAI_API_KEY")) 
@@ -31,18 +34,18 @@ public class DalleGenerator {
         }
     }
 
-        //testing
-    public static void main(String[] args) {
-        // Example usage with a sample prompt
-
-        String prompt = "A futuristic cityscape with flying cars and neon lights at night";
-        String imageUrl = generateImage(prompt);
-
-        if (imageUrl != null) {
-            System.out.println("Generated Image URL: " + imageUrl);
-        } else {
-            System.out.println("Image generation failed.");
-        }
-    }
+//        //testing
+//    public static void main(String[] args) {
+//        // Example usage with a sample prompt
+//
+//        String prompt = "A futuristic cityscape with flying cars and neon lights at night";
+//        String imageUrl = generateImage(prompt);
+//
+//        if (imageUrl != null) {
+//            System.out.println("Generated Image URL: " + imageUrl);
+//        } else {
+//            System.out.println("Image generation failed.");
+//        }
+//    }
 }
 

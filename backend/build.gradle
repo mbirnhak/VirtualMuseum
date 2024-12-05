@@ -26,7 +26,7 @@ def langchain4j = "0.36.2"
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation "dev.langchain4j:langchain4j-open-ai:$langchain4j"
-    implementation 'org.slf4j:slf4j-simple:2.0.9'
+//    implementation 'org.slf4j:slf4j-simple:2.0.9'
 	implementation 'com.google.code.gson:gson:2.11.0'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
