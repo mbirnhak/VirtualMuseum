@@ -39,7 +39,9 @@ public class MuseumController {
 
         try {
             // Send the text to the ElevenLabs API and get audio data
+            System.out.println("trying audio");
             audio = audioGenerator.generateAudio(description);
+            System.out.println("audio" + audio);
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -58,6 +60,4 @@ public class MuseumController {
 
         return map;
     }
-
-
 }

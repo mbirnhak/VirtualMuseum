@@ -22,7 +22,7 @@ public class TextGenerator {
 
     String visionChat(String imageUrl) {
         Response<AiMessage> response = chatModel.generate(
-                SystemMessage.from(""),
+                SystemMessage.from("You are a curator at the best Museum in the world and have the most knowledge on history"),
                 UserMessage.from(
                         ImageContent.from(imageUrl),
                         TextContent.from("What do you see?")
