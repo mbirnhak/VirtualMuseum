@@ -1,4 +1,4 @@
-package edu.trincoll.VirtualMuseum;
+package edu.trincoll.VirtualMuseum.Service;
 
 import java.io.*;
 import java.net.*;

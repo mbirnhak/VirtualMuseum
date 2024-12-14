@@ -1,4 +1,4 @@
-package edu.trincoll.VirtualMuseum;
+package edu.trincoll.VirtualMuseum.Service;
 
 import dev.langchain4j.data.image.Image;
 import dev.langchain4j.model.image.ImageModel;

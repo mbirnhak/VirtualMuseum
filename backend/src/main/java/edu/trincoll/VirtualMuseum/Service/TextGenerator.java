@@ -1,4 +1,4 @@
-package edu.trincoll.VirtualMuseum;
+package edu.trincoll.VirtualMuseum.Service;
 
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ImageContent;
@@ -20,7 +20,7 @@ public class TextGenerator {
             .modelName(OpenAiChatModelName.GPT_4_O_MINI)
             .build();
 
-    String visionChat(String imageUrl) {
+    public String visionChat(String imageUrl) {
         Response<AiMessage> response = chatModel.generate(
                 SystemMessage.from("You are a curator at the best Museum in the world and have the most knowledge on history"),
                 UserMessage.from(

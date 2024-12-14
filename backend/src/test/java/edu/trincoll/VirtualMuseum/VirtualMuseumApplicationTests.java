@@ -3,6 +3,10 @@ package edu.trincoll.VirtualMuseum;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import edu.trincoll.VirtualMuseum.Service.AudioGenerator;
+import edu.trincoll.VirtualMuseum.Service.DalleGenerator;
+import edu.trincoll.VirtualMuseum.Service.TextGenerator;
+
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,7 +27,7 @@ class VirtualMuseumApplicationTests {
 		String outputPath = "src/main/resources/output1.mp3"; // Path where audio should be generated
 
 		// Act
-		audioGenerator.generateAudio();
+		audioGenerator.generateAndSaveAudio();
 
 		// Assert
 		File outputFile = new File(outputPath);
