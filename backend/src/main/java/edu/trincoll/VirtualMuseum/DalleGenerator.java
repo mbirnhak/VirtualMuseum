@@ -33,19 +33,3 @@ public class DalleGenerator {
             return null;
         }
     }
-
-//        //testing
-//    public static void main(String[] args) {
-//        // Example usage with a sample prompt
-//
-//        String prompt = "A futuristic cityscape with flying cars and neon lights at night";
-//        String imageUrl = generateImage(prompt);
-//
-//        if (imageUrl != null) {
-//            System.out.println("Generated Image URL: " + imageUrl);
-//        } else {
-//            System.out.println("Image generation failed.");
-//        }
-//    }
-}
-

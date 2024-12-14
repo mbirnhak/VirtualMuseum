@@ -4,44 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Virtual Museum</title>
-    <!-- Optional: Include Bootstrap for the carousel (add to your HTML head) -->
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <!-- Include Bootstrap for the carousel -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f0f0f0; /* Light gray background */
-        }
-
-        .carousel-img {
-            width: 50%; /* Set the image width to 50% of its container */
-            max-width: 500px; /* Optional: you can still set a maximum width if needed */
-            height: auto; /* Keep the aspect ratio of the image */
-            margin: auto; /* Center the image horizontally */
-        }
-    </style>
-
 </head>
 <body>
 
-<h1>Virtual Museum</h1>
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-spinner"></div>
+    <p>Retrieving ancient archived images...</p>
+</div>
 
-<!-- User input for prompt -->
-<form method="POST" action="/create_image">
-    <label for="prompt">Enter a prompt:</label>
-    <input type="text" id="prompt" name="prompt" placeholder="Describe an image" required>
-    <button type="submit">Generate Image</button>
-</form>
+<!-- Center the header and the prompt form -->
+<div class="content-container">
+    <h1>Virtual Museum</h1>
+
+    <!-- User input for prompt, centered -->
+    <div class="form-container">
+        <form method="POST" action="/create_image" onsubmit="showLoadingScreen()">
+            <label for="prompt">Enter a prompt:</label>
+            <input type="text" id="prompt" name="prompt" placeholder="Describe an ancient civilization" required>
+            <button type="submit">Generate Image</button>
+        </form>
+    </div>
+</div>
 
 <!-- Image Carousel -->
-{% if image_urls %}
-    <h2>Generated Images:</h2>
-    <div id="imageCarousel" class="carousel slide" data-ride="carousel">
+{% set images_with_descriptions_list = images_with_descriptions | list %}
+{% if images_with_descriptions_list and images_with_descriptions_list|length > 0 %}
+    <h2>Generated Images with Descriptions:</h2>
+    <div id="imageCarousel" class="carousel slide" data-ride="false"> <!-- Disable auto-slide -->
         <div class="carousel-inner">
-            {% for url in image_urls %}
+            {% for url, description in images_with_descriptions_list %}
                 <div class="carousel-item {% if loop.first %}active{% endif %}">
                     <img src="{{ url }}" class="d-block w-50 carousel-img" alt="Generated Image">
+                    <div class="description-box d-flex align-items-center">
+                        <!-- Button to trigger audio playback -->
+                        <button class="btn btn-primary btn-sm play-audio" data-audio-src="{{ url_for('serve_data_file', filename='audio_' ~ loop.index0 ~ '.mp3') }}">
+                            Play Audio
+                        </button>
+                        <!-- Button to pause audio -->
+                        <button class="btn btn-secondary btn-sm pause-audio" disabled>
+                            Pause Audio
+                        </button>
+                        <!-- Description text -->
+                        <p>{{ description }}</p>
+                    </div>
                 </div>
             {% endfor %}
         </div>
+
+        <!-- Show arrows only if there are images -->
         <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
@@ -51,12 +66,58 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
+{% else %}
+    <p>No images to display. Please enter a prompt to generate images.</p>
 {% endif %}
 
 <!-- Optional: Include Bootstrap and jQuery (for carousel functionality) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Show the loading screen when the form is submitted
+    function showLoadingScreen() {
+        document.getElementById('loadingScreen').style.display = 'flex';
+    }
+
+    // Audio play/pause functionality
+    document.querySelectorAll('.play-audio').forEach(function(button) {
+        let audio = null; // Declare audio variable outside the function to reset it on each play
+        let pauseButton = button.nextElementSibling; // The pause button right after the play button
+
+        button.addEventListener('click', function() {
+            const audioSrc = button.getAttribute('data-audio-src');
+
+            // If audio isn't already loaded, create and play it
+            if (!audio || audio.ended) {
+                audio = new Audio(audioSrc); // Create a new audio object if none exists or if the previous audio has ended
+                audio.play();
+                pauseButton.disabled = false; // Enable pause button
+            } else if (audio.paused) {
+                // Resume audio if paused
+                audio.play();
+                pauseButton.disabled = false;
+            }
+        });
+
+        // Pause button functionality
+        pauseButton.addEventListener('click', function() {
+            if (audio) {
+                audio.pause(); // Pause the audio
+                pauseButton.disabled = true; // Disable the pause button when audio is paused
+            }
+        });
+    });
+
+    // Prevent carousel slide if audio is playing
+    $('#imageCarousel').on('slide.bs.carousel', function(event) {
+        const audio = document.querySelector('audio');
+        if (audio && !audio.paused) {
+            event.preventDefault();  // Prevent slide transition if audio is playing
+        }
+    });
+</script>
 
 </body>
 </html>

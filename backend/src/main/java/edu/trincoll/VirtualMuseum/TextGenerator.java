@@ -4,6 +4,7 @@ import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ImageContent;
 import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModelName;
@@ -21,6 +22,7 @@ public class TextGenerator {
 
     String visionChat(String imageUrl) {
         Response<AiMessage> response = chatModel.generate(
+                SystemMessage.from(""),
                 UserMessage.from(
                         ImageContent.from(imageUrl),
                         TextContent.from("What do you see?")

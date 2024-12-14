@@ -33,13 +33,13 @@ public class AudioGenerator {
             String applyTextNormalization
     ) {}
 
-    public void generateAudio() {
+    public void generateAndSaveAudio() {
         String textToSpeak = "testing the audio part of our project"; // Text to convert to speech
         String outputPath = "src/main/resources/output1.mp3"; // Path to save the output audio file
 
         try {
             // Send the text to the ElevenLabs API and get audio data
-            byte[] audioData = sendTextToSpeechAPI(textToSpeak);
+            byte[] audioData = generateAudio(textToSpeak);
 
             // Save the audio data to a file
             saveAudioToFile(audioData, outputPath);
@@ -57,7 +57,7 @@ public class AudioGenerator {
      * @return A byte array containing the audio data.
      * @throws IOException If an I/O error occurs.
      */
-    public byte[] sendTextToSpeechAPI(String textToSpeak) throws IOException {
+    public byte[] generateAudio(String textToSpeak) throws IOException {
         String VOICE_ID = "CwhRBWXzGAHq8TQ4Fs17"; // Voice ID
         Payload payload = getPayload(textToSpeak);
         Gson gson = new Gson();
